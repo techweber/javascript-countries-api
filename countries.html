@@ -1,0 +1,54 @@
+<html>
+<title>Countries App</title>
+<body>
+<label> Select Data to Fetch </label> <br />
+<select id="api" name="api" onclick="fetchData(this)">
+	<option value=""></option>
+	<option value="all">Get All Countries</all>
+	<option value="name">Get Country by Partial Name</all>
+	<option value="lang">Get Country details by language</all>
+	<option value="capital">Search By Capital City</all>			
+</select>
+
+<input type="text" id="text" placeholder="Enter Term here"  />
+
+<h2>API Response Results will show below::</h2>
+<div id="results"><div>
+<script>
+
+	function showData(data){
+		var html = `<table border="1"><tr><td>Name</td><td>Capital</td><td>Region</td><td>Time Zone</td><td>Flag</td></tr>`;
+
+		for(var record in data ){
+				html += `<tr><td>${data[record].name}</td><td>${data[record].capital}</td><td>${data[record].region}</td><td>${data[record].timezones}</td><td><img src="${data[record].flag}" style="width:100px;" /></td></tr>`;
+		}
+		html +=  + "</table>";				
+		document.getElementById("results").innerHTML = html;
+	}
+
+
+	function fetchData(e){
+		
+		var api_url = "https://restcountries.eu/rest/v2/";
+		if(e.val!="all"){
+			var term = document.getElementById("text").value;			
+		}
+		if(e.value=="all"){
+			api_url +="all";	
+		}else if(e.value=='name') {
+			if(term === ''){ alert("Enter term"); term.focus(); }
+			api_url +="name/"+term;	
+		}else if(e.value=='lang') {				
+			if(term === ''){ alert("Enter term"); term.focus(); }
+			api_url +="lang/"+term;				
+		}else if(e.value =="capital") {			
+			if(term === ''){ alert("Enter term"); term.focus(); }
+			api_url +="capital/"+term;
+		}
+
+		fetch(api_url)
+		  .then(response => response.json())
+		  .then(data => showData(data));
+	}
+	</script>
+</body></html>
